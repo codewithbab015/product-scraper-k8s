@@ -32,5 +32,3 @@ kubectl delete pod pvc-debugger -n ns-scraper
 kubectl delete job scraper-runner -n ns-scraper
 
 echo "✅ Done. File saved to ./${get_local_path}"
-
-k cp dev-ns/vol-inspect:/app/data/ ./data/
