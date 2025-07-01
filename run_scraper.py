@@ -26,7 +26,7 @@ def build_args(
     category_name: str,
     max_number: str,
     destination: str,
-    limit_records: str
+    limit_records: str,
 ) -> list:
     args = ["python3", str(run_script), "--path", str(folder_path)]
     match run_mode:
@@ -51,7 +51,7 @@ def build_args(
                 "--extract",
                 str(folder_path / extract_file),
                 "--limit_records",
-                str(limit_records)
+                str(limit_records),
             ]
         case "load":
             transform_file = format_filename(
@@ -84,7 +84,11 @@ def parse_arguments():
         help="Directs the destination of the final processed and cleaned data.",
     )
     parser.add_argument("--max", type=int, default=1, help="Maximum page number limit")
-    parser.add_argument("--limit_records", default="", help="Limit the maximum record values are required.")
+    parser.add_argument(
+        "--limit_records",
+        default="",
+        help="Limit the maximum record values are required.",
+    )
     return parser.parse_args()
 
 
@@ -137,7 +141,7 @@ def run_main():
         category_name,
         max_page_num,
         args.destination,
-        args.limit_records
+        args.limit_records,
     )
 
     print(f"Running script with args: {command_args}")

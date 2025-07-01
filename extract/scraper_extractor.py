@@ -77,7 +77,7 @@ def extract_product_data(page, page_url, starting_index=1):
                         "marketplace": "amazon",
                         "index": idx,
                         "date_collected": today,
-                        "url": "https://www.amazon.ae"
+                        "url": "https://www.amazon.ae",
                     }
                 )
                 product_data.append(details)
@@ -106,7 +106,9 @@ def extract_all_paginated_data(browser, paginated_urls):
                 page.wait_for_load_state("networkidle")
 
                 page_data = extract_product_data(page, url, global_index)
-                print(f"Total extracted products: [{len(page_data)}] -- page: [{page_number}]")
+                print(
+                    f"Total extracted products: [{len(page_data)}] -- page: [{page_number}]"
+                )
                 all_product_data.extend(page_data)
                 global_index += len(page_data)
                 break

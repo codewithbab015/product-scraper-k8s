@@ -215,19 +215,22 @@ def process_product_detail(products: list, category: str, subcategory: str) -> l
                 detailed_product_list.append(product_details)
                 print(f"[{idx}] Collected: {product_details['name'][:60]}...")
             except Exception as error:
-                print(f"[{idx}] Failed to extract from {product['product_detail_url']}: {error}")
+                print(
+                    f"[{idx}] Failed to extract from {product['product_detail_url']}: {error}"
+                )
 
         browser.close()
 
     return detailed_product_list
 
+
 from argparse import ArgumentParser
 
-def run_transformer(args: ArgumentParser, limit_records: str=""):
+
+def run_transformer(args: ArgumentParser, limit_records: str = ""):
 
     logger.info("Starting detail extraction script...")
 
-    
     os.makedirs(args.path, exist_ok=True)
 
     config = utils.load_config("configs.yml")
@@ -237,11 +240,11 @@ def run_transformer(args: ArgumentParser, limit_records: str=""):
     subcategory = config[category_key][subcategory_key]["name"]
 
     products_ = load_products(args.extract)
-    
+
     if limit_records != "":
-        products_ = products_[:int(limit_records)]
+        products_ = products_[: int(limit_records)]
         # products_ = products_[int(limit_records) + 13:int(limit_records) + 15]
-        
+
     detailed_products = []
 
     logger.info("Launching browser with Playwright...")
@@ -255,19 +258,25 @@ def run_transformer(args: ArgumentParser, limit_records: str=""):
                 detailed_products.append(details)
                 print(f"[{idx}] Collected: {details['name'][:60]}...")
             except Exception as e:
-                print(f"[{idx}] Failed to extract from {product['product_detail_url']}: {e}")
+                print(
+                    f"[{idx}] Failed to extract from {product['product_detail_url']}: {e}"
+                )
 
         browser.close()
 
     save_to_json(detailed_products, args.name)
     print(f"\nSaved {len(detailed_products)} products to '{args.name}'")
 
+
 def main() -> None:
     args = utils.parse_args()
-    limited_rec = int(args.limit_records) if args.limit_records != "" else args.limit_records
+    limited_rec = (
+        int(args.limit_records) if args.limit_records != "" else args.limit_records
+    )
     # print(limited_rec)
-    run_transformer(args, limited_rec)  
-    
+    run_transformer(args, limited_rec)
+
+
 if __name__ == "__main__":
 
     main()

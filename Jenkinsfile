@@ -15,12 +15,12 @@ pipeline {
         RUN_GROUP = "electronics"
         RUN_NAME = "camera-photo"
         MAX_PAGE = "1"
+        LIMIT_VALUES = "4"
         DESTINATION = "dir"
-        LIMIT_RECORDS = "1"
 
         // Docker image metadata
         DOCKER_USER = "mrbaloyin"
-        DOCKER_IMG = "amazon-web-scraper-cli"
+        DOCKER_IMG = "python-web-scraper-cli"
     }
 
     stages {
@@ -88,6 +88,7 @@ pipeline {
                     task docker:run-jobs \
                         DOCKER_TAG=$DOCKER_TAG \
                         MAX=$MAX_PAGE \
+                        LIMIT_VALUES=$LIMIT_VALUES \
                         DESTINATION=$DESTINATION \
                         RUN_GROUP=$RUN_GROUP \
                         RUN_NAME=$RUN_NAME > task_run.log 2>&1

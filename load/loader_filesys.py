@@ -73,26 +73,24 @@ def run_filesys(args_parser: ArgumentParser) -> None:
         "url",
         "image_url",
         "review_score",
-        "date_collected"
+        "date_collected",
     ]
-    
+
     sorted_cols = fields + list(set(df.columns) - set(fields))
     print(sorted_cols)
     df = df[sorted_cols]
     df = df.dropna().drop_duplicates().reset_index()
     print(
-         "Overall Missing Values: \n",
-         (
-             df.isna()
-             .sum()
-             .reset_index(name="N/A Count")
-             .rename(columns={"index": "Column Names"})
-         ),
-     )
+        "Overall Missing Values: \n",
+        (
+            df.isna()
+            .sum()
+            .reset_index(name="N/A Count")
+            .rename(columns={"index": "Column Names"})
+        ),
+    )
     # Data Overview
     print(f"Total records: {len(df)}")
     print(df.head())
 
     write_details_to_csv(df, args_parser.name)
-    
-
