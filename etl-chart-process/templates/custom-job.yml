@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+{{- with .Values }}
+  name: job-{{ .jobToRun }}
+  namespace: {{ .namespace }}
+spec:
+  backoffLimit: {{ .etlJobs.backoffLimit }}
+  template:
+    spec:
+      containers:
+        - name: {{ .jobToRun }}
+          image: "{{ .etlJobs.image }}:{{ .etlJobs.tag }}"
+          imagePullPolicy: {{ .etlJobs.imagePullPolicy }}
+          command: ["python3", "run_script.py"]
+          args:
+            [
+              "--run_group", "{{ index .etlJobs.jobs .jobToRun "run_group" }}",
+              "--run_name", "{{ index .etlJobs.jobs .jobToRun "run_name" }}",
+              "--run_mode", "{{ index .etlJobs.jobs .jobToRun "run_mode" }}",
+              {{- if eq .jobToRun "extract" }}
+              "--max", "{{ index .etlJobs.jobs "extract" "max_value" }}"
+              {{- else if eq .jobToRun "transform" }}
+              "--limit_records", "{{ index .etlJobs.jobs "transform" "limit_records" }}"
+              {{- else if eq .jobToRun "load" }}
+              "--destination", "{{ index .etlJobs.jobs "load" "destination" }}"
+              {{- end }}
+            ]
+          {{- if .volume.enabled }}
+          volumeMounts:
+            - name: {{ .volume.name }}
+              mountPath: {{ .volume.mountPath }}
+          {{- end }}
+      restartPolicy: Never
+      {{- if .volume.enabled }}
+      volumes:
+        - name: {{ .volume.name }}
+          persistentVolumeClaim:
+            claimName: {{ .volume.claimName }}
+      {{- end }}
+{{- end }}

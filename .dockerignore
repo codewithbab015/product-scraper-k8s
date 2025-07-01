@@ -1,0 +1,54 @@
+# Bytecode & cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+.venv/
+.run_env_activate.sh
+
+# Version control
+.git/
+.git
+.gitignore
+
+# Linters & config tools
+.pre-commit-config.yaml
+.flake8
+.pylintrc
+
+# Editor config
+.vscode/
+
+# Jupyter notebooks
+*.ipynb
+
+# CI/CD
+Jenkinsfile
+
+# Docs
+README.md
+
+# Pytest cache
+.pytest_cache/
+
+# Local data and unused modules
+data/
+app/
+data-modeler/
+ground-coffee/
+pet-dry-food/
+pet-wet-food/
+
+# Scripts not needed in prod image
+data_modeler.py
+data_processor.py
+*.png
+*.jpeg
+*.svg
+site/
+docs/
+
+data_v1/

@@ -1,0 +1,16 @@
+__pycache__
+.venv/
+.env
+*.xlsx
+*.csv
+*.json
+*.pdf
+*.ini
+.google-cookie
+.docx
+
+docs/
+site/
+# *.txt
+git_control_flow.sh
+k8s-v1/

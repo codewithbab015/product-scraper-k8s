@@ -1,0 +1,75 @@
+version: '3'
+
+vars:
+  DOCKER_USER: mrbaloyin
+  VERSION: '{{.VERSION | default "latest"}}'
+  IMAGE_NAME: '{{.IMAGE_NAME | default "python-web-scraper"}}'
+  TAG: '{{.DOCKER_USER}}/{{.IMAGE_NAME}}:{{.VERSION}}'
+  DOCKER_TAG: '{{.DOCKER_TAG | default .TAG}}'
+
+tasks:
+  local-build:
+    desc: Build Docker image locally and load into Docker daemon    
+    cmds:
+      - |
+          docker buildx build --load -t {{.DOCKER_TAG}} .
+
+  extract:
+    desc: Extract or Scrape Data
+    vars:
+      MAX: '{{.MAX | default ""}}'
+    preconditions:
+      - sh: |
+          if [ -z "{{.MAX}}" ]; then
+            echo "Error: --max must be set when RUN_MODE is 'extract'"
+            exit 1
+          fi
+    cmds:
+      - echo "🔍 Starting data extraction..."
+      - |
+        docker run --rm -v "${PWD}/data:/app/data" {{.DOCKER_TAG}} \
+          --run_group {{.RUN_GROUP}} \
+          --run_name {{.RUN_NAME}} \
+          --max {{.MAX}} \
+          --run_mode "extract"
+
+  transform:
+    desc: Transform Extracted or Scraped Data
+    vars:
+      LIMIT_VALUES: '{{.LIMIT_VALUES | default ""}}'
+    cmds:
+      - echo "🔄 Starting data transformation..."
+      - |
+        docker run --rm -v "${PWD}/data:/app/data" {{.DOCKER_TAG}} \
+          --run_group {{.RUN_GROUP}} \
+          --run_name {{.RUN_NAME}} \
+          --run_mode "transform" \
+          {{if .LIMIT_VALUES}} --limit_records {{.LIMIT_VALUES}} {{end}}
+
+  load:
+    desc: Load Transformed Data into Filesystem or Postgres DB
+    vars:
+      DESTINATION: '{{.DESTINATION | default ""}}'
+    preconditions:
+      - sh: |
+          if [ -z "{{.DESTINATION}}" ]; then
+            echo "Error: --destination must be set when RUN_MODE is 'load'"
+            exit 1
+          fi
+    cmds:
+      - echo "📤 Loading data to destination..."
+      - |
+        docker run --rm -v "${PWD}/data:/app/data" {{.DOCKER_TAG}} \
+          --run_group {{.RUN_GROUP}} \
+          --run_name {{.RUN_NAME}} \
+          --destination {{.DESTINATION}} \
+          --run_mode "load"
+
+  run-jobs:
+    desc: Run the Full ETL Pipeline via CLI
+    cmds:
+      - task: extract
+      - task: transform
+      - task: load
+      - |
+          echo "✅ All ETL steps completed successfully."

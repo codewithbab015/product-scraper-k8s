@@ -1,0 +1,16 @@
+---
+version: '3'
+includes:
+  docker: ./taskfiles/DockerTaskfile.yml
+  cli-runner: ./taskfiles/RunCLI.yml
+
+vars:
+  RUN_GROUP: '{{.RUN_GROUP | default "pet-food"}}'
+  RUN_NAME: '{{.RUN_NAME | default "pet-wet-food"}}'
+  RUN_MODE: '{{.RUN_MODE | default "extract"}}'
+ 
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true

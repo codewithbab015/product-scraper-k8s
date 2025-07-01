@@ -1,0 +1,35 @@
+namespace: ns-scraper-cli
+
+etlJobs:
+  image: mrbaloyin/amazon-web-scraper-cli
+  tag: latest
+  imagePullPolicy: IfNotPresent
+  backoffLimit: 3
+
+  jobs:
+    extract:
+      run_group: electronics
+      run_name: camera-photo
+      run_mode: extract
+      max_value: 1
+
+    transform:
+      run_group: electronics
+      run_name: camera-photo
+      run_mode: transform
+      limit_records: 10
+
+    load:
+      run_group: electronics
+      run_name: camera-photo
+      run_mode: load
+      destination: dir
+
+volume:
+  enabled: true
+  name: scraper-cli-vol
+  claimName: pvc-scraper-cli
+  mountPath: /app/data/
+
+# Active job selection
+jobToRun: extract  # Options: extract, transform, load

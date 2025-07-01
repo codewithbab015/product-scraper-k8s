@@ -1,0 +1,19 @@
+version: '3'
+
+tasks:
+  set-condition:
+    preconditions:
+      - sh: |
+          echo "{{.RUN_MODE}}"
+
+          if [ "{{.RUN_MODE}}" = "extract" ]; then
+            if [ -z "{{.MAX}}" ]; then
+              echo "Error: --max must be set when RUN_MODE is 'extract'"
+              exit 1
+            fi
+          elif [ "{{.RUN_MODE}}" = "load" ]; then
+            if [ -z "{{.DESTINATION}}" ]; then
+              echo "Error: --destin must be set when RUN_MODE is 'load'"
+              exit 1
+            fi
+          fi

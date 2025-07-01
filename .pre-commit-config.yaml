@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        name: isort (python)
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+      
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        types: [python]
+
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.3.1
+    hooks:
+    -   id: autoflake
+        args: [--remove-all-unused-imports, --in-place]
+
+
+  - repo: local
+    hooks:
+    - id: pylint
+      name: pylint
+      entry: /mnt/d/research-workspace/workx-projects/.venv/bin/pylint
+      language: system
+      types: [python]
+      args: [--ignore-patterns=venv]
