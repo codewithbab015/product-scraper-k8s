@@ -1,0 +1,16 @@
+{{- if not (lookup "v1" "PersistentVolumeClaim" .Release.Namespace .Values.volume.claimName) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.volume.claimName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.volume.storageSize | default "1Gi" }}
+  {{- if .Values.volume.storageClassName }}
+  storageClassName: {{ .Values.volume.storageClassName }}
+  {{- end }}
+{{- end }}

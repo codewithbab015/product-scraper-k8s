@@ -1,28 +1,22 @@
 namespace: ns-scraper-cli
 
 etlJobs:
-  image: mrbaloyin/amazon-web-scraper-cli
+  image: mrbaloyin/python-web-scraper
   tag: latest
   imagePullPolicy: IfNotPresent
   backoffLimit: 3
 
   jobs:
     extract:
-      run_group: electronics
-      run_name: camera-photo
-      run_mode: extract
-      max_value: 1
+      runMode: extract
+      maxValue: 1
 
     transform:
-      run_group: electronics
-      run_name: camera-photo
-      run_mode: transform
-      limit_records: 10
+      runMode: transform
+      limitValue: 3
 
     load:
-      run_group: electronics
-      run_name: camera-photo
-      run_mode: load
+      runMode: load
       destination: dir
 
 volume:
@@ -30,6 +24,18 @@ volume:
   name: scraper-cli-vol
   claimName: pvc-scraper-cli
   mountPath: /app/data/
+  storageSize: 3Gi
+  storageClassName: standard
 
-# Active job selection
+# These override values used dynamically at runtime
+runGroup: "pet-food"
+runName: "pet-dry-food"
+
 jobToRun: extract  # Options: extract, transform, load
+
+# helm template ./etl-chart-process --dry-run \
+#   --set "jobToRun=extract,runGroup=pet-entertainment,runName=pet-round-balls"
+
+# helm install etl-extract ./etl-chart-process \
+#   --set "jobToRun=extract,runGroup=pet-food,runName=pet-dry-food"
+

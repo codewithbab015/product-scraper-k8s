@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Auth and Git source
-        GIT_URL = 'https://github.com/codewithbab015/amazon-scraper-dockerized.git'
+        GIT_URL = 'https://github.com/codewithbab015/product-scraper-k8s.git'
         GIT_CREDENTIALS_ID = 'github_token_id'
         DOCKERHUB_CREDENTIALS_ID = 'docker_token_id'
 
@@ -12,8 +12,8 @@ pipeline {
         VENV_DIR = "${WORKSPACE}/.venv"
 
         // Taskfile args
-        RUN_GROUP = "electronics"
-        RUN_NAME = "camera-photo"
+        RUN_GROUP = "pet-food"
+        RUN_NAME = "pet-dry-food"
         MAX_PAGE = "1"
         LIMIT_VALUES = "4"
         DESTINATION = "dir"

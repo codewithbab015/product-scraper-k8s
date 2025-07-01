@@ -1,41 +1,43 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-{{- with .Values }}
-  name: job-{{ .jobToRun }}
-  namespace: {{ .namespace }}
+  name: job-{{ .Values.jobToRun }}
+  namespace: {{ .Values.namespace }}
 spec:
-  backoffLimit: {{ .etlJobs.backoffLimit }}
+  backoffLimit: {{ .Values.etlJobs.backoffLimit }}
   template:
     spec:
-      containers:
-        - name: {{ .jobToRun }}
-          image: "{{ .etlJobs.image }}:{{ .etlJobs.tag }}"
-          imagePullPolicy: {{ .etlJobs.imagePullPolicy }}
-          command: ["python3", "run_script.py"]
-          args:
-            [
-              "--run_group", "{{ index .etlJobs.jobs .jobToRun "run_group" }}",
-              "--run_name", "{{ index .etlJobs.jobs .jobToRun "run_name" }}",
-              "--run_mode", "{{ index .etlJobs.jobs .jobToRun "run_mode" }}",
-              {{- if eq .jobToRun "extract" }}
-              "--max", "{{ index .etlJobs.jobs "extract" "max_value" }}"
-              {{- else if eq .jobToRun "transform" }}
-              "--limit_records", "{{ index .etlJobs.jobs "transform" "limit_records" }}"
-              {{- else if eq .jobToRun "load" }}
-              "--destination", "{{ index .etlJobs.jobs "load" "destination" }}"
-              {{- end }}
-            ]
-          {{- if .volume.enabled }}
-          volumeMounts:
-            - name: {{ .volume.name }}
-              mountPath: {{ .volume.mountPath }}
-          {{- end }}
       restartPolicy: Never
-      {{- if .volume.enabled }}
+      containers:
+        - name: {{ .Values.jobToRun }}
+          image: "{{ .Values.etlJobs.image }}:{{ .Values.etlJobs.tag }}"
+          imagePullPolicy: {{ .Values.etlJobs.imagePullPolicy }}
+          command: ["python3", "run_scraper.py"]
+          args:
+            - "--run_group"
+            - "{{ .Values.runGroup }}"
+            - "--run_name"
+            - "{{ .Values.runName }}"
+            - "--run_mode"
+            - "{{ (index .Values.etlJobs.jobs .Values.jobToRun).runMode }}"
+            {{- if eq .Values.jobToRun "extract" }}
+            - "--max"
+            - "{{ (index (index .Values.etlJobs.jobs "extract") "maxValue") }}"
+            {{- else if eq .Values.jobToRun "transform" }}
+            - "--limit_records"
+            - "{{ (index (index .Values.etlJobs.jobs "transform") "limitValue") }}"
+            {{- else if eq .Values.jobToRun "load" }}
+            - "--destination"
+            - "{{ (index (index .Values.etlJobs.jobs "load") "destination") }}"
+            {{- end }}
+          {{- if .Values.volume.enabled }}
+          volumeMounts:
+            - name: {{ .Values.volume.name }}
+              mountPath: {{ .Values.volume.mountPath }}
+          {{- end }}
+      {{- if .Values.volume.enabled }}
       volumes:
-        - name: {{ .volume.name }}
+        - name: {{ .Values.volume.name }}
           persistentVolumeClaim:
-            claimName: {{ .volume.claimName }}
+            claimName: {{ .Values.volume.claimName }}
       {{- end }}
-{{- end }}
