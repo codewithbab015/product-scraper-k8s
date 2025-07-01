@@ -43,8 +43,11 @@ pipeline {
                 sh '''#!/bin/bash
                     echo "🔧 Setting up Python virtual environment..."
                     set -e
-                    chmod +x activate_venv_ci.sh
-                    ./activate_venv_ci.sh
+                    chmod 775 setup_virtualenv.sh.sh
+                    ./setup_virtualenv.sh.sh
+
+                    chmod 775 start_etl_pipeline.sh
+                    ./start_etl_pipeline.sh
                     echo "✅ Python environment setup complete."
                 '''
             }

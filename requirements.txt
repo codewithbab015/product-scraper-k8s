@@ -1,14 +1,15 @@
-autopep8
-black
-flake8
-isort
 pandas
 pyyaml
 playwright
 beautifulsoup4
 go-task-bin
 psycopg2-binary
-yamllint
-pre-commit
+# autopep8
+# black
+# flake8
+# isort
+# yamllint
+# pre-commit
 # nltk
+# toml
 # pre-commit install 
