@@ -1,4 +1,4 @@
-namespace: ns-scraper-cli
+namespace: dev-ns
 
 etlJobs:
   image: mrbaloyin/python-web-scraper
@@ -26,6 +26,7 @@ volume:
   mountPath: /app/data/
   storageSize: 3Gi
   storageClassName: standard
+  volInspect: vol-inspect
 
 # These override values used dynamically at runtime
 runGroup: "pet-food"
@@ -38,4 +39,6 @@ jobToRun: extract  # Options: extract, transform, load
 
 # helm install etl-extract ./etl-chart-process \
 #   --set "jobToRun=extract,runGroup=pet-food,runName=pet-dry-food"
+
+# View Volume Data: kubectl exec -it vol-inspect -n dev-ns -- sh
 
