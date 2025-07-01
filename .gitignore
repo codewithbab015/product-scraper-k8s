@@ -8,7 +8,6 @@ __pycache__
 *.ini
 .google-cookie
 .docx
-
 docs/
 site/
 # *.txt
