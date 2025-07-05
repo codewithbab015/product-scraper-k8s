@@ -4,6 +4,7 @@ playwright
 beautifulsoup4
 go-task-bin
 psycopg2-binary
+xlsxwriter
 # autopep8
 # black
 # flake8

@@ -20,7 +20,7 @@ pipeline {
 
         // Docker image metadata
         DOCKER_USER = "mrbaloyin"
-        DOCKER_IMG = "python-web-scraper-cli"
+        DOCKER_IMG = "marketplace-scraper-cli"
     }
 
     stages {

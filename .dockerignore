@@ -8,7 +8,7 @@ __pycache__/
 .env
 .venv/
 .run_env_activate.sh
-
+*.sh
 # Version control
 .git/
 .git
@@ -49,6 +49,7 @@ data_processor.py
 *.jpeg
 *.svg
 site/
+output/
 docs/
 
 data_v1/

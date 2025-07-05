@@ -1,0 +1,24 @@
+2025-07-05 02:39:19,075 - INFO - Missing Value Summary:
+            Column  Missing Count
+          category              0
+       subcategory              0
+       marketplace              0
+             brand              0
+              name              0
+             price              0
+          currency              0
+       description              0
+               url              0
+         image_url              0
+      review_score              1
+    date_collected              0
+          page_url              0
+product_detail_url              0
+     total_reviews              1
+2025-07-05 02:39:19,109 - INFO - Final record count: 5
+2025-07-05 02:39:19,110 - INFO - Saving cleaned data...
+2025-07-05 02:39:19,110 - INFO - Saving data to Excel file: final_amazonae_pet_food_dry_food_05072025_023918.xlsx
+2025-07-05 02:39:20,076 - INFO - Excel file saved.
+2025-07-05 02:39:20,076 - INFO - Saving data to CSV file: final_amazonae_pet_food_dry_food_05072025_023918.csv
+2025-07-05 02:39:20,258 - INFO - CSV file saved.
+2025-07-05 02:39:20,259 - INFO - ✔️ Export completed. Files saved to: /mnt/d/research-workspace/workx-projects/unified-devopsx/product-scraper-k8s/output/amazonae/pet_food/dry_food

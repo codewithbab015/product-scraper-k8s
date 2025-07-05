@@ -2,50 +2,37 @@ version: '3'
 
 tasks:
   extract:
-    desc: Extract or Scrape Data
-    vars:
-      MAX: '{{.MAX | default ""}}'
-    preconditions:
-      - sh: |
-          if [ -z "{{.MAX}}" ]; then
-            echo "Error: --max must be set when RUN_MODE is 'extract'"
-            exit 1
-          fi
+    desc: 🔍 Extract or scrape product data
     cmds:
       - echo "🔍 Starting data extraction..."
-      - python run_scraper.py --run_group {{.RUN_GROUP}} --run_name {{.RUN_NAME}} --max {{.MAX}} --run_mode "extract"
+      - python extract/extraction.py -m "{{.MARKET_PLACE}}" -c "{{.CATEGORY}}" -s "{{.SUBCATEGORY}}" 
 
   transform:
-    desc: Transform Extracted or Scraped Data
-    vars:
-      LIMIT_VALUES: '{{.LIMIT_VALUES | default ""}}'
+    desc: 🔄 Transform the extracted data
     cmds:
       - echo "🔄 Starting data transformation..."
-      - |
-        python run_scraper.py \
-          --run_group {{.RUN_GROUP}} \
-          --run_name {{.RUN_NAME}} \
-          --run_mode "transform" {{if .LIMIT_VALUES}} --limit_records {{.LIMIT_VALUES}} {{end}}
+      - | 
+          python transform/transform.py -m "{{.MARKET_PLACE}}" -c "{{.CATEGORY}}" -s "{{.SUBCATEGORY}}" 
 
   load:
-    desc: Load Transformed Data into Filesystem or Postgres DB
+    desc: 📤 Load transformed data to filesystem or database
     vars:
       DESTINATION: '{{.DESTINATION | default ""}}'
     preconditions:
       - sh: |
           if [ -z "{{.DESTINATION}}" ]; then
-            echo "Error: --destination must be set when RUN_MODE is 'load'"
+            echo "Error: DESTINATION must be provided for 'load' task (e.g. dir or db)."
             exit 1
           fi
     cmds:
-      - echo "📤 Loading data to destination..."
-      - python run_scraper.py --run_group {{.RUN_GROUP}} --run_name {{.RUN_NAME}} --destination {{.DESTINATION}} --run_mode "load"
-
+      - echo "📤 Loading data to destination:" {{.DESTINATION}}
+      - python load/run_data_loader.py -m "{{.MARKET_PLACE}}" -c "{{.CATEGORY}}" -s "{{.SUBCATEGORY}}" -d "{{.DESTINATION}}"
   run-jobs:
-    desc: Run the Full ETL Pipeline via CLI
+    desc: ⚙️ Run the complete ETL pipeline
     cmds:
       - task: extract
       - task: transform
       - task: load
-      - |
-          echo "✅ All ETL steps completed successfully."
+      - echo "✅ All ETL steps completed successfully."
+
+

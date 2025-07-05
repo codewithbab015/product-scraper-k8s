@@ -1,14 +1,15 @@
 ---
 version: '3'
-includes:
-  docker: ./taskfiles/DockerTaskfile.yml
-  cli-runner: ./taskfiles/RunCLI.yml
 
 vars:
-  RUN_GROUP: '{{.RUN_GROUP | default "pet-food"}}'
-  RUN_NAME: '{{.RUN_NAME | default "pet-wet-food"}}'
-  RUN_MODE: '{{.RUN_MODE | default "extract"}}'
- 
+  MARKET_PLACE: '{{.MARKET_PLACE | default ""}}'
+  CATEGORY: '{{.CATEGORY | default ""}}'
+  SUBCATEGORY: '{{.SUBCATEGORY | default ""}}'
+
+includes:
+  # docker: ./taskfiles/DockerTaskfile.yml
+  cli-runner: ./taskfiles/RunCLI.yml
+
 tasks:
   default:
     cmds:

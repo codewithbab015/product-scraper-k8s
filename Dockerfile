@@ -34,4 +34,4 @@ ENV PYTHONUNBUFFERED=1
 ENV PLAYWRIGHT_BROWSERS_PATH="/root/.cache/ms-playwright"
 
 # Set application entrypoint
-ENTRYPOINT ["python", "run_scraper.py"]
+ENTRYPOINT ["python", "scraper_etl_pipeline.py"]

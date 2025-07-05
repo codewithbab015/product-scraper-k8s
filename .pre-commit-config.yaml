@@ -23,11 +23,11 @@ repos:
         args: [--remove-all-unused-imports, --in-place]
 
 
-  - repo: local
-    hooks:
-    - id: pylint
-      name: pylint
-      entry: /mnt/d/research-workspace/workx-projects/.venv/bin/pylint
-      language: system
-      types: [python]
-      args: [--ignore-patterns=venv]
+  # - repo: local
+  #   hooks:
+  #   - id: pylint
+  #     name: pylint
+  #     entry: /mnt/d/research-workspace/workx-projects/.venv/bin/pylint
+  #     language: system
+  #     types: [python]
+  #     args: [--ignore-patterns=venv]
