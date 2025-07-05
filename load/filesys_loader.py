@@ -32,6 +32,7 @@ from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
+import toml
 
 # ───────────────────────────── Logging setup ──────────────────────────────
 log_dir = Path("logs")
@@ -118,20 +119,10 @@ def run_loader(args: ArgumentParser) -> None:
     with input_path.open(encoding="utf-8") as f:
         data = json.load(f)
 
-    priority = [
-        "category",
-        "subcategory",
-        "marketplace",
-        "brand",
-        "name",
-        "price",
-        "currency",
-        "description",
-        "url",
-        "image_url",
-        "review_score",
-        "date_collected",
-    ]
+    with open("load_config.toml") as f:
+        config = toml.load(f)
+    priority = config["fields"]["priority"]
+
     df = pd.DataFrame(data)[priority + list(set(data[0]).difference(priority))]
 
     logger.info(

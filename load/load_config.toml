@@ -1,0 +1,15 @@
+[fields]
+priority = [
+    "category",
+    "subcategory",
+    "marketplace",
+    "brand",
+    "name",
+    "price",
+    "currency",
+    "description",
+    "url",
+    "image_url",
+    "review_score",
+    "date_collected"
+]
